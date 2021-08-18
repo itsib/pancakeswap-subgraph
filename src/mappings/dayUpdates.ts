@@ -1,31 +1,31 @@
 /* eslint-disable prefer-const */
 import { BigDecimal, BigInt, EthereumEvent } from '@graphprotocol/graph-ts'
-import { Bundle, Pair, PairDayData, Token, TokenDayData, UniswapDayData, UniswapFactory } from '../types/schema'
+import { Bundle, Pair, PairDayData, Token, TokenDayData, PancakeDayData, PancakeFactory } from '../types/schema'
 import { PairHourData } from './../types/schema'
 import { FACTORY_ADDRESS, ONE_BI, ZERO_BD, ZERO_BI } from './helpers'
 
-export function updateUniswapDayData(event: EthereumEvent): UniswapDayData {
-  let uniswap = UniswapFactory.load(FACTORY_ADDRESS)
+export function updatePancakeDayData(event: EthereumEvent): PancakeDayData {
+  let pancake = PancakeFactory.load(FACTORY_ADDRESS)
   let timestamp = event.block.timestamp.toI32()
   let dayID = timestamp / 86400
   let dayStartTimestamp = dayID * 86400
-  let uniswapDayData = UniswapDayData.load(dayID.toString())
-  if (uniswapDayData === null) {
-    uniswapDayData = new UniswapDayData(dayID.toString())
-    uniswapDayData.date = dayStartTimestamp
-    uniswapDayData.dailyVolumeUSD = ZERO_BD
-    uniswapDayData.dailyVolumeETH = ZERO_BD
-    uniswapDayData.totalVolumeUSD = ZERO_BD
-    uniswapDayData.totalVolumeETH = ZERO_BD
-    uniswapDayData.dailyVolumeUntracked = ZERO_BD
+  let pancakeDayData = PancakeDayData.load(dayID.toString())
+  if (pancakeDayData === null) {
+    pancakeDayData = new PancakeDayData(dayID.toString())
+    pancakeDayData.date = dayStartTimestamp
+    pancakeDayData.dailyVolumeUSD = ZERO_BD
+    pancakeDayData.dailyVolumeETH = ZERO_BD
+    pancakeDayData.totalVolumeUSD = ZERO_BD
+    pancakeDayData.totalVolumeETH = ZERO_BD
+    pancakeDayData.dailyVolumeUntracked = ZERO_BD
   }
 
-  uniswapDayData.totalLiquidityUSD = uniswap.totalLiquidityUSD
-  uniswapDayData.totalLiquidityETH = uniswap.totalLiquidityETH
-  uniswapDayData.txCount = uniswap.txCount
-  uniswapDayData.save()
+  pancakeDayData.totalLiquidityUSD = pancake.totalLiquidityUSD
+  pancakeDayData.totalLiquidityETH = pancake.totalLiquidityETH
+  pancakeDayData.txCount = pancake.txCount
+  pancakeDayData.save()
 
-  return uniswapDayData as UniswapDayData
+  return pancakeDayData as PancakeDayData
 }
 
 export function updatePairDayData(event: EthereumEvent): PairDayData {
